@@ -2,389 +2,529 @@
 <html lang="tr">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mass Protocol Web Dashboard</title>
-    <!-- SADECE Tailwind CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        background: '#0a0a0a',
-                        panel: '#131316',
-                        accent: '#00E676',
-                        borderC: '#27272A',
-                    }
-                }
-            }
-        }
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+        name="viewport" />
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#0e0e0e">
+    <title>MASS PROTOCOL | Taktikal Takvim</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700;800;900&family=Inter:wght@400;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#f3ffca", "on-primary": "#516700", "background": "#0e0e0e", "surface-container-highest": "#262626", "surface-bright": "#2c2c2c", "surface-container-low": "#131313", "surface": "#0e0e0e", "outline-variant": "#484847", "surface-container-high": "#20201f", "error": "#ff7351", "primary-dim": "#beee00", "secondary-container": "#636100", "surface-container-lowest": "#000000", "inverse-primary": "#516700", "on-surface": "#ffffff", "on-error": "#450900", "on-surface-variant": "#adaaaa", "error-container": "#b92902", "on-error-container": "#ffd2c8" }, fontFamily: { "headline": ["Lexend"], "body": ["Inter"], "label": ["Inter"] }, borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" } } } }
     </script>
     <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        body {
+            background-color: #0e0e0e;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            min-height: max(884px, 100dvh);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .font-headline {
+            font-family: 'Lexend', sans-serif;
+        }
+
         .custom-scrollbar::-webkit-scrollbar {
-            width: 8px;
+            width: 4px;
         }
 
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #27272A;
+            background: #262626;
             border-radius: 4px;
-        }
-
-        /* SHADCN SPOTLIGHT CARD EFEKTİ (SAF CSS & VANILLA JS PORTU) */
-        :root {
-            --x: 0;
-            --y: 0;
-        }
-
-        [data-glow] {
-            --border-size: 2px;
-            --spotlight-size: 300px;
-            --glow-color: rgba(0, 230, 118, 0.5);
-            /* Default Neon Yesil */
-            position: relative;
-            transform: translateZ(0);
-            border-radius: inherit;
-        }
-
-        [data-glow]::before,
-        [data-glow]::after {
-            content: "";
-            position: absolute;
-            inset: calc(var(--border-size) * -1);
-            border: var(--border-size) solid transparent;
-            border-radius: inherit;
-            background-attachment: fixed;
-            background-position: 50% 50%;
-            mask: linear-gradient(transparent, transparent), linear-gradient(white, white);
-            mask-clip: padding-box, border-box;
-            mask-composite: intersect;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            z-index: 50;
-        }
-
-        /* Fare üzerine geldiğinde çizgiler ışıldasın */
-        [data-glow]:hover::before,
-        [data-glow]:hover::after {
-            opacity: 1;
-        }
-
-        [data-glow]::before {
-            background-image: radial-gradient(var(--spotlight-size) var(--spotlight-size) at calc(var(--x, 0) * 1px) calc(var(--y, 0) * 1px),
-                    var(--glow-color), transparent 100%);
-        }
-
-        /* İsteğe Bağlı Parıltı Renkleri */
-        [data-glow="red"] {
-            --glow-color: rgba(239, 68, 68, 0.8);
-        }
-
-        [data-glow="blue"] {
-            --glow-color: rgba(96, 165, 250, 0.8);
-        }
-
-        [data-glow="green"] {
-            --glow-color: rgba(0, 230, 118, 0.8);
-        }
-
-        [data-glow="panel"] {
-            --glow-color: rgba(255, 255, 255, 0.15);
-            --spotlight-size: 600px;
         }
     </style>
 </head>
 
-<body
-    class="bg-background text-white min-h-screen overflow-hidden antialiased font-sans selection:bg-accent selection:text-black">
-    <div id="root" class="h-screen w-full flex">
-        <div
-            class="flex w-full h-full items-center justify-center font-bold text-[#71717A] text-2xl tracking-[0.3em] uppercase animate-pulse">
-            Bağlantı Kuruluyor...
+<body class="bg-background text-on-surface flex flex-col min-h-screen selection:bg-primary selection:text-on-primary">
+    <!-- TopAppBar -->
+    <header
+        class="fixed top-0 left-0 w-full z-50 bg-[#0e0e0e] flex justify-between items-center px-4 md:px-6 py-4 border-b border-surface-container-highest">
+        <div class="flex items-center gap-3 md:gap-4">
+            <button onclick="document.location.reload()"
+                class="text-primary hover:bg-surface-container-highest transition-colors duration-150 p-2 active:scale-95 rounded">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+            <h1 class="text-xl md:text-2xl font-black tracking-tighter text-primary uppercase font-headline">MASS
+                PROTOCOL</h1>
         </div>
-    </div>
+        <div class="flex items-center gap-2">
+            <span class="text-xs font-bold text-on-surface-variant uppercase tracking-widest hidden md:block">OPERATOR
+                01 (BASE)</span>
+            <button onclick="handleAction('clear_future')"
+                class="text-error hover:bg-surface-container-highest transition-colors duration-150 p-2 active:scale-95 rounded"
+                title="Geleceği Sıfırla">
+                <span class="material-symbols-outlined">delete_sweep</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-grow pt-24 pb-32 px-4 md:px-6 max-w-4xl mx-auto w-full">
+        <!-- View: HOME -->
+        <div id="view-home">
+            <!-- Screen 1: Günün Hedefi -->
+            <section class="space-y-6 md:space-y-8 mb-12" id="today-mission">
+                <header>
+                    <p id="ui-today-text"
+                        class="text-on-surface-variant font-headline font-bold text-sm tracking-[0.2em] uppercase">--
+                    </p>
+                    <h2 id="ui-greeting"
+                        class="text-4xl md:text-7xl font-black font-headline tracking-tighter leading-none mt-2 text-primary uppercase">
+                        GÜNÜN İDMANI</h2>
+                </header>
+                <div id="ui-right-panel" class="space-y-4"></div>
+            </section>
+
+            <!-- Screen 2: Takvim -->
+            <section class="space-y-6 md:space-y-8 mt-12" id="schedule">
+                <header class="flex justify-between items-end border-b border-surface-container-highest pb-4">
+                    <div>
+                        <h2 id="ui-month-title"
+                            class="text-3xl md:text-4xl font-black font-headline tracking-tighter uppercase leading-none">
+                            TAKVİM</h2>
+                        <p
+                            class="text-[10px] md:text-xs font-bold text-on-surface-variant uppercase tracking-widest mt-1">
+                            DİNAMİK KAYDIRMA SİSTEMİ DEVREDE</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="changeMonth(-1)"
+                            class="h-10 w-10 flex items-center justify-center bg-surface-container-highest rounded active:scale-90 transition-transform">
+                            <span class="material-symbols-outlined text-on-surface">chevron_left</span>
+                        </button>
+                        <button onclick="changeMonth(1)"
+                            class="h-10 w-10 flex items-center justify-center bg-surface-container-highest rounded active:scale-90 transition-transform">
+                            <span class="material-symbols-outlined text-on-surface">chevron_right</span>
+                        </button>
+                    </div>
+                </header>
+
+                <div class="space-y-1">
+                    <div
+                        class="grid grid-cols-7 text-center py-2 text-[10px] md:text-xs font-black font-headline text-on-surface-variant uppercase tracking-widest">
+                        <div>PZT</div>
+                        <div>SAL</div>
+                        <div>ÇAR</div>
+                        <div>PER</div>
+                        <div>CUM</div>
+                        <div>CMT</div>
+                        <div>PAZ</div>
+                    </div>
+                    <div id="ui-calendar-grid" class="grid grid-cols-7 gap-1 md:gap-2"></div>
+                </div>
+
+                <!-- Sistem Durumu -->
+                <div class="bg-surface-container p-4 md:p-6 rounded-md border-t-2 border-primary-dim mt-8">
+                    <h5 class="font-headline font-black text-xs uppercase tracking-widest mb-4">SİSTEM METRİKLERİ</h5>
+                    <div class="grid grid-cols-3 gap-2 md:gap-4 text-center">
+                        <div class="bg-surface-container-highest p-3 rounded">
+                            <div
+                                class="text-on-surface-variant text-[8px] md:text-[10px] font-bold uppercase tracking-widest mb-1">
+                                BAŞARILI</div>
+                            <div id="ui-comp-weeks"
+                                class="text-on-surface font-headline font-black text-lg md:text-2xl">0
+                            </div>
+                        </div>
+                        <div class="bg-surface-container-highest p-3 rounded">
+                            <div
+                                class="text-on-surface-variant text-[8px] md:text-[10px] font-bold uppercase tracking-widest mb-1">
+                                KALAN</div>
+                            <div id="ui-rem-weeks" class="text-on-surface font-headline font-black text-lg md:text-2xl">
+                                36
+                            </div>
+                        </div>
+                        <div class="bg-surface-container-highest p-3 rounded">
+                            <div
+                                class="text-on-surface-variant text-[8px] md:text-[10px] font-bold uppercase tracking-widest mb-1">
+                                PAS/ÇÖP</div>
+                            <div id="ui-skip-days"
+                                class="text-on-surface font-headline font-black text-lg md:text-2xl text-error">0</div>
+                        </div>
+                    </div>
+                    <p class="text-[10px] md:text-xs mt-4 text-on-surface-variant font-body">
+                        İstasyon atlandığında otomatik olarak bir sonraki "Aktif" güne kaydırılır. <span
+                            class="text-error font-bold">Salı dinlenme barikatları aşılamaz.</span> İlerleme Yüzdeniz:
+                    </p>
+                    <div class="w-full bg-surface-container-highest h-1 rounded flex mt-3">
+                        <div id="ui-prog-bar"
+                            class="bg-primary h-full transition-all duration-500 shadow-[0_0_10px_rgba(243,255,202,0.8)]"
+                            style="width:0%"></div>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+
+        <!-- View: ANALYTICS -->
+        <div id="view-analytics" class="hidden">
+            <section class="flex flex-col gap-1 mb-8">
+                <h1
+                    class="font-headline font-black text-3xl md:text-5xl tracking-tighter uppercase text-on-surface italic">
+                    MISSION <span class="text-primary">ANALYTICS</span>
+                </h1>
+                <p class="font-label text-on-surface-variant text-[9px] md:text-xs uppercase tracking-[0.2em] mt-1">
+                    TELEMETRY PERFORMANCE LOG // SADECE 3 X 10 HEDEFLERİ</p>
+            </section>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="ui-charts-container">
+                <!-- Charts injected here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- BottomNavBar -->
+    <nav
+        class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 md:px-12 py-3 bg-[#0e0e0e]/95 backdrop-blur-xl border-t border-[#262626] shadow-[0_-4px_20px_rgba(243,255,202,0.05)]">
+        <button onclick="switchView('home')" id="nav-btn-home"
+            class="flex flex-col items-center justify-center p-2 transition-all duration-200 active:scale-90 bg-primary text-on-primary rounded-md w-24">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">target</span>
+            <span class="font-headline font-bold text-[9px] uppercase tracking-widest mt-1 block">Mission</span>
+        </button>
+        <button onclick="switchView('analytics')" id="nav-btn-analytics"
+            class="flex flex-col items-center justify-center p-2 text-[#737373] hover:text-white transition-all duration-200 active:scale-90 rounded-md w-24">
+            <span class="material-symbols-outlined">analytics</span>
+            <span class="font-headline font-bold text-[9px] uppercase tracking-widest mt-1 block">Analytıcs</span>
+        </button>
+    </nav>
 
     <script>
-        // FARE TAKIPÇİSİ (SPOTLIGHT İÇİN)
-        document.addEventListener('pointermove', e => {
-            document.documentElement.style.setProperty('--x', e.clientX);
-            document.documentElement.style.setProperty('--y', e.clientY);
-        });
-
-        // STATE
-        let schedule = null;
-        let stats = null;
-        let currentDate = new Date();
-        let selectedDateStr = "";
-        let cardioChoice = "";
-        let now = new Date();
-        let actionLoading = false;
-
-        const MONTH_NAMES = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
-        const DAY_NAMES = ["PZT", "SAL", "ÇAR", "PER", "CUM", "CMT", "PAZ"];
-        const todayStr = now.toISOString().split('T')[0];
-
-        setInterval(() => { now = new Date(); renderApp(); }, 60000);
-
-        // FETCH DATA
-        // retries=50 demek: 50 defa 200ms arayla (Toplam 10 saniye) dener
-        // Bu sayede .bat dosyasına tıklamaktan sunucunun ayağa kalkmasına kadar olan aralığı bekler, "hemen" hata vermez.
-        async function fetchData(retries = 50) {
-            try {
-                const res = await fetch('http://127.0.0.1:18444/api/data');
-                if (!res.ok) throw new Error("Sunucu meşgul veya yok.");
-                const json = await res.json();
-                schedule = json.data.schedule;
-                stats = json.stats;
-
-                let focusDate = todayStr;
-                const todayData = schedule.find(d => d.date === todayStr);
-                if (!todayData) {
-                    const nextPending = schedule.find(d => d.is_active && !d.completed);
-                    if (nextPending) focusDate = nextPending.date;
+        // -------------------------------------------------------------------------------- //
+        // JS DATABASE & ALGORITHM (Same robust logic)
+        // -------------------------------------------------------------------------------- //
+        const DB_KEY = "MassProtocolData_v3";
+        function loadData() {
+            let raw = localStorage.getItem(DB_KEY);
+            if (raw) {
+                let data = JSON.parse(raw);
+                if (data.workouts) {
+                    data.workouts.forEach(w => {
+                        w.description = w.description.replace('Leg Press', 'Leg Extension');
+                        if (w.weights && w.weights['Leg Press']) {
+                            w.weights['Leg Extension'] = w.weights['Leg Press'];
+                            delete w.weights['Leg Press'];
+                        }
+                    });
                 }
-                selectedDateStr = focusDate;
-                if (focusDate) {
-                    const fd = new Date(focusDate);
-                    currentDate = new Date(fd.getFullYear(), fd.getMonth(), 1);
-                }
-                renderApp();
-            } catch (e) {
-                // AJAN 6: Dosyadan Açma İzolasyonu (Eğer index.html protokolü file:// ise)
-                if (window.location.protocol === 'file:') {
-                    document.getElementById('root').innerHTML = `
-                <div class='flex w-full h-full flex-col justify-center items-center text-center bg-[#0a0a0a] gap-6'>
-                    <div class='text-[#EF4444] text-5xl font-black tracking-widest'>⚠️ DURUN! ⚠️</div>
-                    <div class='text-gray-300 text-2xl font-bold max-w-3xl leading-relaxed'>
-                        Şu an <span class='text-accent'>index.html</span> dosyasına çift tıklayarak giriş yaptınız.<br>
-                        Bu şekilde veri tabanı ve mantık (Python motoru) ÇALIŞMAZ!
-                    </div>
-                    <div class='bg-[#2E1010] border border-[#EF4444] p-6 rounded-2xl'>
-                        Lütfen bu sekmeyi kapatın ve klasörünüzdeki<br>
-                        <span class='text-[#00E676] text-3xl font-black'>WEB_TAKVIMI_AC.bat</span><br>dosyasına tıklayarak açın.
-                    </div>
-                </div>`;
-                    return;
-                }
-
-                // Dosyadan açılmadıysa 10 saniye boyunca denemeye devam et
-                if (retries > 0) setTimeout(() => fetchData(retries - 1), 200);
-                else {
-                    document.getElementById('root').innerHTML = `
-                <div class='flex w-full h-full flex-col justify-center items-center text-center bg-[#0a0a0a] gap-6 p-8'>
-                    <div class='text-[#EF4444] text-4xl font-black tracking-widest'>BAĞLANTI ZAMAN AŞIMI</div>
-                    <div class='text-gray-400 text-xl font-bold max-w-2xl leading-relaxed'>
-                        Tarayıcınız 10 saniye boyunca masaüstünüzdeki sunucunun hazır olmasını bekledi ancak sunucu motoru uyanamadı.
-                    </div>
-                    <div class='bg-[#131316] border border-[#27272A] p-6 rounded-2xl text-left'>
-                        <div class='text-accent font-bold mb-2'>Neden Olabilir?</div>
-                        <ul class='list-disc pl-5 text-gray-400 space-y-2'>
-                            <li>Önceki denemede arkada açık kalan bir Python / CMD ekranı takılı kalmış olabilir (Görev yöneticisinden kapatın).</li>
-                            <li>Sisteminizde Python düzgün çalışmıyor olabilir.</li>
-                            <li>Ekranda açılan siyah konsol ekranını siz veya bir virüs programı engellemiş olabilir.</li>
-                        </ul>
-                    </div>
-                    <button onclick="window.location.reload()" class='border border-gray-600 px-8 py-4 rounded-xl font-bold text-gray-300 hover:text-white hover:bg-gray-800 transition-colors uppercase tracking-widest'>Tekrar Dene</button>
-                </div>`;
-                }
+                return data;
             }
+            return null;
+        }
+        function saveData(data) { localStorage.setItem(DB_KEY, JSON.stringify(data)); }
+
+        function createData(startDateStr) {
+            let workouts = []; let d = new Date(startDateStr); let dayId = 1; let weekCount = 1; let workoutCountForWeek = 0;
+            while (weekCount <= 6) {
+                if (d.getDay() !== 2) {
+                    let type = (workoutCountForWeek % 2 === 0) ? "SE" : "E";
+                    let desc = type === "SE" ? "Chest Press, Leg Extension, Lat Pulldown, Plank" : "30-60 Dakika Düşük Yoğunluklu Kardiyo";
+                    let reps = "";
+                    if (type === "SE") { if (workoutCountForWeek === 0) reps = "3 x 10"; else if (workoutCountForWeek === 2) reps = "3 x 20"; else if (workoutCountForWeek === 4) reps = "3 x 30"; } else { reps = "30-60 Min"; if (weekCount === 6) { desc = "40-60 Dakika Kardiyo (Veya Opsiyonel Dinlenme)"; reps = "Opsiyonel"; } }
+                    workouts.push({ day_id: dayId, date: d.toISOString().split('T')[0], week: weekCount, type: type, description: desc, reps: reps, is_active: true, completed: false, skipped: false, cardio_type: null, weights: {} });
+                    dayId++; workoutCountForWeek++; if (workoutCountForWeek >= 6) { workoutCountForWeek = 0; weekCount++; }
+                } else { workouts.push({ day_id: dayId, date: d.toISOString().split('T')[0], week: weekCount, type: "Rest", description: "Tam Dinlenme Günü", reps: "-", is_active: false, completed: true, skipped: false, cardio_type: null, weights: {} }); dayId++; } d.setDate(d.getDate() + 1);
+            }
+            workouts.forEach(w => { if (!w.weights) w.weights = {}; });
+            return { start_date: startDateStr, workouts: workouts, stats: { completed_days: 0, skipped_days: 0, days_remaining: 36, current_phase: "Base Building" } };
         }
 
-        async function handleAction(action, identifier) {
-            const dayInfo = schedule.find(d => d.date === selectedDateStr);
-            if (action === 'complete' && dayInfo.type === 'E' && !cardioChoice) {
-                alert("Lütfen önce kardiyo türünüzü seçin!"); return;
+        function updateStats(data) {
+            let completedActive = data.workouts.filter(w => w.completed && w.type !== 'Rest' && w.type !== 'PASS').length;
+            data.stats.completed_days = completedActive; data.stats.days_remaining = 36 - completedActive; saveData(data);
+        }
+
+        function skipDateProcess(data, targetDateStr) {
+            let oldSchedule = [...data.workouts]; let targetIdx = oldSchedule.findIndex(w => w.date === targetDateStr);
+            if (targetIdx === -1 || oldSchedule[targetIdx].completed) return data;
+            let shiftedTask = { ...oldSchedule[targetIdx] }; shiftedTask.completed = false; shiftedTask.skipped = false;
+            oldSchedule[targetIdx].skipped = true; oldSchedule[targetIdx].type = "PASS"; oldSchedule[targetIdx].completed = true; data.stats.skipped_days += 1;
+            let queue = [shiftedTask];
+            for (let i = targetIdx + 1; i < oldSchedule.length; i++) { let w = oldSchedule[i]; if (!w.completed && w.type !== 'Rest' && w.type !== 'PASS') queue.push({ ...w }); }
+            let currentD = new Date(targetDateStr); currentD.setDate(currentD.getDate() + 1);
+            let newSchedule = []; for (let i = 0; i <= targetIdx; i++) newSchedule.push(oldSchedule[i]);
+            let queueIdx = 0;
+            while (queueIdx < queue.length) {
+                let dStr = currentD.toISOString().split('T')[0]; let dayId = newSchedule.length + 1;
+                if (currentD.getDay() === 2) { newSchedule.push({ day_id: dayId, date: dStr, week: queue[queueIdx].week, type: "Rest", description: "Tam Dinlenme Günü", reps: "-", is_active: false, completed: true, skipped: false, cardio_type: null, weights: {} }); } else { let task = queue[queueIdx]; task.day_id = dayId; task.date = dStr; newSchedule.push(task); queueIdx++; } currentD.setDate(currentD.getDate() + 1);
             }
-            if (action === 'clear_future') {
-                if (!confirm("Bugünden itibaren olan ileriki günler için işaretlediğiniz TÜM ONARIMLAR sıfırlanacaktır. Onaylıyor musunuz?")) return;
+            data.workouts = newSchedule; updateStats(data); return data;
+        }
+
+        function clearFutureDataLogic() {
+            let data = loadData(); let todayStr = new Date().toISOString().split('T')[0];
+            let past = []; for (let w of data.workouts) { if (w.date < todayStr) past.push(w); }
+            let totalCompleted = past.filter(x => x.completed && x.type !== 'Rest' && x.type !== 'PASS').length;
+            let freshData = createData("2000-01-01"); let freshTasks = freshData.workouts.filter(x => x.type !== 'Rest');
+            let remainingTasks = freshTasks.slice(totalCompleted); let newSchedule = [...past]; let currentD = new Date(todayStr); let queueIdx = 0;
+            while (queueIdx < remainingTasks.length) {
+                let dStr = currentD.toISOString().split('T')[0]; let dayId = newSchedule.length + 1;
+                if (currentD.getDay() === 2) { newSchedule.push({ day_id: dayId, date: dStr, week: remainingTasks[queueIdx].week, type: "Rest", description: "Tam Dinlenme Günü", reps: "-", is_active: false, completed: true, skipped: false, cardio_type: null, weights: {} }); } else { let task = remainingTasks[queueIdx]; task.day_id = dayId; task.date = dStr; task.completed = false; task.skipped = false; task.cardio_type = null; newSchedule.push(task); queueIdx++; } currentD.setDate(currentD.getDate() + 1);
             }
+            data.workouts = newSchedule; data.stats.skipped_days = past.filter(x => x.skipped).length; updateStats(data); saveData(data);
+        }
 
-            actionLoading = true;
-            renderApp();
+        function initOrLoadLocally() {
+            let todayDateStr = new Date().toISOString().split('T')[0]; let data = loadData(); if (!data) { data = createData(todayDateStr); saveData(data); } let changed = false;
+            for (let w of data.workouts) { if (w.date < todayDateStr && !w.completed && w.type !== 'Rest' && w.type !== 'PASS') { data = skipDateProcess(data, w.date); changed = true; } }
+            if (changed) saveData(data); return data;
+        }
 
-            const payload = action === 'skip' ? { action, date_str: identifier } :
-                action === 'clear_future' ? { action } :
-                    { action, day_id: identifier, cardio: cardioChoice };
+        let schedule = null; let stats = null; let currentDate = new Date(); let selectedDateStr = ""; let cardioChoice = ""; let now = new Date();
+        const MONTH_NAMES = ["Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"];
+        const DAY_NAMES = ["PAZARTESİ", "SALI", "ÇARŞAMBA", "PERŞEMBE", "CUMA", "CUMARTESİ", "PAZAR"];
+        const GYM_SCHEDULE = { 1: { time: "17:00 - 23:00", isEvening: true }, 2: { time: "06:00 - 17:00", isEvening: false }, 3: { time: "17:00 - 23:00", isEvening: true }, 4: { time: "06:00 - 17:00", isEvening: false }, 5: { time: "17:00 - 23:00", isEvening: true }, 6: { time: "08:00 - 16:00", isEvening: false }, 0: { time: "18:00 - 22:00", isEvening: true } };
 
-            try {
-                const res = await fetch('http://127.0.0.1:18444/api/action', { method: 'POST', body: JSON.stringify(payload) });
-                const json = await res.json();
-                schedule = json.data;
-                stats = json.stats;
+        let todayStr = now.toISOString().split('T')[0];
+        setInterval(() => { now = new Date(); todayStr = now.toISOString().split('T')[0]; fetchData(); }, 60000);
 
-                if (action !== 'clear_future') {
-                    const nextPending = schedule.find(d => d.is_active && !d.completed && d.date >= todayStr);
-                    if (nextPending) {
-                        selectedDateStr = nextPending.date;
-                        const fd = new Date(nextPending.date);
-                        currentDate = new Date(fd.getFullYear(), fd.getMonth(), 1);
+        function fetchData() {
+            const dbInfo = initOrLoadLocally(); schedule = dbInfo.workouts; stats = dbInfo.stats;
+            let focusDate = todayStr; const todayData = schedule.find(d => d.date === todayStr);
+            if (!todayData) { const nextPending = schedule.find(d => d.is_active && !d.completed); if (nextPending) focusDate = nextPending.date; }
+            selectedDateStr = focusDate; if (focusDate) { const fd = new Date(focusDate); currentDate = new Date(fd.getFullYear(), fd.getMonth(), 1); } renderApp();
+        }
+
+        function handleAction(action, identifier) {
+            if (action === 'clear_future') { if (!confirm("TÜM İLERİ TARİHLİ ONARIMLAR sıfırlanacaktır. Onaylıyor musunuz?")) return; }
+            let db = loadData();
+            if (db.workouts && !db.workouts[0].weights) db.workouts.forEach(w => { if (!w.weights) w.weights = {}; });
+
+            if (action === 'skip') { db = skipDateProcess(db, identifier); saveData(db); }
+            else if (action === 'swap') {
+                let currentIdx = db.workouts.findIndex(x => x.day_id === identifier);
+                if (currentIdx > -1) {
+                    let currentW = db.workouts[currentIdx];
+                    let nextIdx = db.workouts.findIndex((x, idx) => idx > currentIdx && x.type !== 'Rest' && x.type !== 'PASS' && !x.completed);
+                    if (nextIdx > -1) {
+                        let nextW = db.workouts[nextIdx];
+                        let tempType = currentW.type; let tempDesc = currentW.description; let tempReps = currentW.reps;
+                        currentW.type = nextW.type; currentW.description = nextW.description; currentW.reps = nextW.reps;
+                        nextW.type = tempType; nextW.description = tempDesc; nextW.reps = tempReps;
+                        saveData(db);
+                    } else { alert("İleri tarihlerde yer değiştirecek uygun (dinlenme olmayan ve aktif) idman bulunamadı!"); return; }
+                }
+            }
+            else if (action === 'complete') {
+                let w = db.workouts.find(x => x.day_id === identifier);
+                if (w) {
+                    w.completed = true; w.cardio_type = cardioChoice;
+                    if (w.type === 'SE') {
+                        const inputs = document.querySelectorAll('.weight-input');
+                        inputs.forEach(inp => { w.weights[inp.dataset.exercise] = inp.value; });
                     }
-                } else selectedDateStr = todayStr;
-                cardioChoice = "";
-            } catch (e) { console.error(e); }
+                    updateStats(db); saveData(db);
+                }
+            } else if (action === 'clear_future') { clearFutureDataLogic(); db = loadData(); }
 
-            actionLoading = false;
-            renderApp();
+            schedule = db.workouts; stats = db.stats;
+            if (action !== 'clear_future') {
+                const completedCount = db.workouts.filter(w => w.completed && w.type !== 'Rest' && w.type !== 'PASS').length;
+                if (completedCount >= 36) { alert("TEBRİKLER! 6 Haftalık BASE BUILDING Bitti!"); }
+                const nextPending = schedule.find(d => d.is_active && !d.completed && d.date >= todayStr); if (nextPending) { selectedDateStr = nextPending.date; const fd = new Date(nextPending.date); currentDate = new Date(fd.getFullYear(), fd.getMonth(), 1); }
+            } else { selectedDateStr = todayStr; }
+            cardioChoice = ""; renderApp();
         }
 
         function updateSelect(val) { cardioChoice = val; renderApp(); }
         function changeMonth(delta) { currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + delta, 1); renderApp(); }
         function selectDate(dateStr) { selectedDateStr = dateStr; renderApp(); }
 
-        function renderApp() {
-            if (!schedule) return;
-            const root = document.getElementById('root');
-            const selectedDayInfo = schedule.find(d => d.date === selectedDateStr);
+        function switchView(viewName) {
+            if (viewName === 'home') {
+                document.getElementById('view-home').classList.remove('hidden');
+                document.getElementById('view-analytics').classList.add('hidden');
+                document.getElementById('nav-btn-home').className = "flex flex-col items-center justify-center p-2 transition-all duration-200 active:scale-90 bg-primary text-on-primary rounded-md w-24";
+                document.getElementById('nav-btn-analytics').className = "flex flex-col items-center justify-center p-2 text-[#737373] hover:text-white transition-all duration-200 active:scale-90 rounded-md w-24";
+            } else {
+                document.getElementById('view-home').classList.add('hidden');
+                document.getElementById('view-analytics').classList.remove('hidden');
+                document.getElementById('nav-btn-analytics').className = "flex flex-col items-center justify-center p-2 transition-all duration-200 active:scale-90 bg-primary text-on-primary rounded-md w-24";
+                document.getElementById('nav-btn-home').className = "flex flex-col items-center justify-center p-2 text-[#737373] hover:text-white transition-all duration-200 active:scale-90 rounded-md w-24";
+                renderCharts();
+            }
+        }
 
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            let firstDayIndex = new Date(year, month, 1).getDay() - 1;
-            if (firstDayIndex === -1) firstDayIndex = 6;
+        function drawChart(exName) {
+            let rawVals = [];
+            let past = schedule.filter(w => w.completed && w.type === 'SE' && w.reps === '3 x 10' && w.weights && w.weights[exName] !== undefined && w.weights[exName] !== "");
+            past.forEach(p => { rawVals.push({ val: parseFloat(p.weights[exName]), date: p.date }); });
 
-            let blanksHtml = Array.from({ length: firstDayIndex }).map(() => `<div class="border-r border-b border-borderC bg-[#0a0a0a]/30"></div>`).join('');
+            let exClass = exName === "Lat Pulldown" ? "border-l-4 border-error" : "border-l-4 border-primary";
+            if (exName === "Leg Extension") exClass = "border-l-4 border-outline-variant";
+            if (exName === "Plank") exClass = "border-l-4 border-secondary";
 
-            let daysHtml = '';
-            for (let d = 1; d <= daysInMonth; d++) {
-                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-                const info = schedule.find(s => s.date === dateStr);
-                const isSelected = selectedDateStr === dateStr;
-                const isToday = todayStr === dateStr;
-
-                let bgClass = "bg-panel";
-                let typeColor = "text-accent";
-                let glowTheme = "green"; // Default spotlight color
-
-                // Duruma göre Arkaplan ve GLOW (Spotlight) Rengi!
-                if (info && info.completed) {
-                    if (info.skipped || info.type === 'Pas Geçildi') { bgClass = "bg-[#2E1010] border-transparent"; typeColor = "text-[#EF4444]"; glowTheme = "red"; }
-                    else if (info.type === 'Rest') { bgClass = "bg-[#0c2445]"; typeColor = "text-[#60A5FA]"; glowTheme = "blue"; }
-                    else { bgClass = "bg-[#0B2B16]"; typeColor = "text-[#00E676]"; glowTheme = "green"; }
-                } else {
-                    if (info?.type === 'Rest') { typeColor = "text-[#60A5FA]"; glowTheme = "blue"; }
-                }
-                if (isSelected) { bgClass = "bg-[#27272A]"; }
-
-                let borderClass = isToday ? "border-accent border-[3px] shadow-[inset_0_0_20px_rgba(0,230,118,0.2)]" : "border-transparent border-2";
-                if (isSelected && !isToday) borderClass = "border-white border-2";
-
-                // data-glow BURADA ENTEGRE EDİLİYOR
-                daysHtml += `
-                <div onclick="selectDate('${dateStr}')" data-glow="${glowTheme}" class="${bgClass} border-r border-b border-borderC relative p-4 flex flex-col justify-between items-center cursor-pointer group rounded-xl m-1 transition-transform active:scale-95">
-                    <div class="w-full text-right font-bold text-xs ${isToday ? 'text-accent' : 'text-[#71717A]'}">${isToday ? 'BUGÜN ' : ''}${d}</div>
-                    ${info ? `<div class="font-black text-2xl xl:text-3xl tracking-tighter ${typeColor} mt-2 drop-shadow-lg">${info.type === 'Pas Geçildi' ? 'SKP' : info.type.toUpperCase()}</div>` : ''}
-                    <div class="absolute inset-0 rounded-xl ${borderClass} pointer-events-none z-10"></div>
-                </div>
-            `;
+            if (rawVals.length === 0) {
+                return `<div class="bg-surface-container-low p-6 rounded-lg ${exClass} relative overflow-hidden group"><div class="flex justify-between items-start mb-4"><div><h2 class="font-headline font-bold text-lg md:text-xl uppercase tracking-tight">${exName}</h2><p class="text-on-surface-variant text-[9px] uppercase tracking-widest">3 x 10 KAYIT BEKLENİYOR</p></div><span class="material-symbols-outlined text-error-dim">error</span></div><div class="h-32 flex flex-col items-center justify-center border border-dashed border-surface-container-highest rounded-md"><span class="font-label text-[10px] text-on-surface-variant uppercase tracking-widest">Henüz Veri Yok</span></div></div>`;
             }
 
-            const currentProg = Math.min(100, Math.floor((stats?.completed_weeks / 6) * 100));
-            const h = now.getHours();
-            let greeting = "İyi Geceler💤";
-            if (h >= 5 && h < 12) greeting = "Günaydın☀️";
-            else if (h >= 12 && h < 17) greeting = "Tünaydın🌤️";
-            else if (h >= 17 && h < 22) greeting = "İyi Akşamlar🌙";
+            let max = Math.max(...rawVals.map(r => r.val)); let min = Math.min(...rawVals.map(r => r.val));
+            if (max === min) { max += 10; min = Math.max(0, min - 10); } let MathRange = max - min;
+            let pathD = ""; let htmlOverlays = ""; let labelsHtml = "";
+            let w = rawVals.length; let stepX = w > 1 ? 80 / (w - 1) : 0; let startX = w > 1 ? 10 : 50;
 
-            const TR_DAY_INDEX = [6, 0, 1, 2, 3, 4, 5];
-            const currentDayName = DAY_NAMES[TR_DAY_INDEX[now.getDay()]];
-            const formattedDate = `${now.getDate()} ${MONTH_NAMES[now.getMonth()]} ${now.getFullYear()} - ${currentDayName}`;
+            rawVals.forEach((p, idx) => {
+                let hRatio = (p.val - min) / MathRange; let px = startX + (idx * stepX); let py = 90 - (hRatio * 80);
+                if (idx === 0) pathD += `M${px},${py} `; else pathD += `L${px},${py} `;
+                htmlOverlays += `<div class="absolute w-2 h-2 md:w-3 md:h-3 bg-primary rounded-full shadow-[0_0_10px_#f3ffca]" style="left: ${px}%; top: ${py}%; transform: translate(-50%, -50%);"></div><div class="absolute text-white font-headline font-black text-[9px] md:text-sm tracking-tighter" style="left: ${px}%; top: ${py}%; transform: translate(-50%, -150%);">${p.val}</div>`;
+                let parts = p.date.split('-'); labelsHtml += `<span style="position:absolute; left:${px}%; top:0; transform:translate(-50%, 0);" class="whitespace-nowrap font-bold">${parts[1]}.${parts[2]}</span>`;
+            });
+            let currentVal = rawVals[rawVals.length - 1].val; let unit = exName === 'Plank' ? 'SN' : 'KG';
 
-            let rightPanelContent = `<div class="text-[#A1A1AA] italic text-center font-bold mt-10">Bu tarihte idman yok.</div>`;
+            return `
+        <div class="bg-surface-container-low p-6 rounded-lg ${exClass} relative overflow-hidden group">
+            <div class="flex justify-between items-start mb-6 md:mb-8"><div><h2 class="font-headline font-bold text-lg md:text-xl uppercase tracking-tight">${exName}</h2><p class="text-on-surface-variant text-[9px] md:text-[10px] uppercase tracking-widest">3 x 10 İlerleyişi</p></div><div class="text-right"><span class="font-headline text-2xl md:text-4xl font-black text-primary italic">${currentVal} <span class="text-sm not-italic ml-1 opacity-50">${unit}</span></span></div></div>
+            <div class="h-32 md:h-40 w-full relative"><svg class="w-full h-full chart-glow" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="${pathD}" vector-effect="non-scaling-stroke" fill="none" stroke="#f3ffca" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path></svg>${htmlOverlays}</div>
+            <div class="mt-4 border-t border-surface-container-highest pt-3 relative h-6 font-label text-[9px] md:text-[10px] text-on-surface-variant uppercase tracking-widest">${labelsHtml}</div>
+        </div>`;
+        }
+
+        function renderCharts() {
+            document.getElementById('ui-charts-container').innerHTML = drawChart("Chest Press") + drawChart("Leg Extension") + drawChart("Lat Pulldown") + drawChart("Plank");
+        }
+
+        function renderApp() {
+            if (!schedule) return; const selectedDayInfo = schedule.find(d => d.date === selectedDateStr);
+
+            // 1. STATS (Bottom / Visualizer)
+            const completedCount = schedule.filter(w => w.completed && w.type !== 'Rest' && w.type !== 'PASS').length;
+            const remainingCount = 36 - completedCount; const currentProg = Math.min(100, Math.floor((completedCount / 36) * 100));
+            document.getElementById('ui-prog-bar').style.width = `${currentProg}%`;
+            document.getElementById('ui-comp-weeks').innerText = `${completedCount}`; document.getElementById('ui-rem-weeks').innerText = `${remainingCount}`; document.getElementById('ui-skip-days').innerText = `${stats?.skipped_days}`;
+            if (stats?.skipped_days > 0) document.getElementById('ui-skip-days').className = "text-error font-headline font-black text-lg md:text-2xl"; else document.getElementById('ui-skip-days').className = "text-on-surface font-headline font-black text-lg md:text-2xl";
+
+            // 2. HEADER
+            const selDateObj = new Date(selectedDateStr);
+            const trDayName = DAY_NAMES[selDateObj.getDay() === 0 ? 6 : selDateObj.getDay() - 1];
+            const mth = MONTH_NAMES[selDateObj.getMonth()];
+            document.getElementById('ui-today-text').innerText = `${trDayName}, ${selDateObj.getDate()} ${mth}`;
+            document.getElementById('ui-greeting').innerText = selectedDateStr === todayStr ? "GÜNÜN İDMANI" : (selectedDateStr < todayStr ? "GEÇMİŞ İDMAN" : "GELECEK İDMAN");
+
+            const year = currentDate.getFullYear(); const month = currentDate.getMonth();
+            document.getElementById('ui-month-title').innerText = `${MONTH_NAMES[month]} ${year}`;
+
+            // 3. CALENDAR
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            let firstDayIndex = new Date(year, month, 1).getDay() - 1; if (firstDayIndex === -1) firstDayIndex = 6;
+            let blanksHtml = Array.from({ length: firstDayIndex }).map(() => `<div class="aspect-square bg-surface-container-lowest opacity-40 rounded"></div>`).join('');
+            let daysHtml = '';
+            for (let d = 1; d <= daysInMonth; d++) {
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`; const info = schedule.find(s => s.date === dateStr);
+                const isSelected = selectedDateStr === dateStr; const isToday = todayStr === dateStr;
+                let bgClass = "bg-surface-container-low border border-outline-variant/30"; let typeColor = "text-on-surface-variant"; let dateColor = "text-on-surface"; let opacity = ""; let actDeco = "";
+
+                if (info && info.completed) {
+                    if (info.type === 'PASS' || info.skipped) { bgClass = "bg-surface-container-lowest border border-error/20"; typeColor = "text-error"; dateColor = "text-on-surface-variant text-opacity-50"; opacity = "opacity-40"; }
+                    else if (info.type === 'Rest') { bgClass = "bg-surface-container-lowest border border-outline-variant/10 text-error"; typeColor = "text-error"; dateColor = "text-on-surface text-opacity-50"; opacity = "opacity-60"; }
+                    else { bgClass = "bg-primary border border-primary shadow-[0_0_15px_rgba(243,255,202,0.15)]"; typeColor = "text-on-primary"; dateColor = "text-on-primary"; }
+                } else if (info?.type === 'Rest') { typeColor = "text-error"; }
+                if (isToday) { bgClass = "bg-surface-container-high border-[1.5px] border-primary"; dateColor = "text-primary"; typeColor = "text-primary"; opacity = ""; actDeco = `<div class="absolute bottom-0 w-full h-[2px] bg-primary"></div>`; }
+                if (isSelected && !isToday) { bgClass = "bg-surface-bright border border-on-surface"; opacity = ""; }
+
+                const gymInfo = GYM_SCHEDULE[new Date(year, month, d).getDay()];
+                let gymDumbbell = gymInfo.isEvening ? `<span class="absolute top-1 left-1 md:top-2 md:left-2 text-[10px] md:text-xs">🏋️</span>` : ``;
+
+                daysHtml += `<div onclick="selectDate('${dateStr}')" class="${bgClass} ${opacity} rounded flex flex-col items-center justify-center relative cursor-pointer active:scale-95 transition-all duration-150 aspect-square md:min-h-[80px]">${gymDumbbell}<span class="text-xs md:text-sm font-black font-headline ${dateColor}">${d}</span><span class="text-[8px] md:text-[10px] font-bold mt-1 ${typeColor}">${info ? info.type : ''}</span>${actDeco}</div>`;
+            }
+            document.getElementById('ui-calendar-grid').innerHTML = blanksHtml + daysHtml;
+
+            // 4. RIGHT PANEL (TODAY'S MISSION CARD)
+            let rightPanelContent = `<div class="bg-surface-container-low p-6 rounded-md text-center opacity-50"><p class="font-headline font-bold">BU TARİHTE İDMAN BULUNMAMAKTADIR.</p></div>`;
             if (selectedDayInfo) {
-                let optionsHtml = '';
+                if (!selectedDayInfo.weights) selectedDayInfo.weights = {};
+                let repsTitle = (selectedDayInfo.type === 'SE' || selectedDayInfo.type === 'E') ? selectedDayInfo.reps : '-';
+                let typeDesc = selectedDayInfo.type === 'SE' ? 'Strength-Endurance' : (selectedDayInfo.type === 'E' ? 'Endurance' : 'Dinlenme');
+                let taskListHtml = '';
+
+                const selGym = GYM_SCHEDULE[selDateObj.getDay()];
+                const gymTimeStr = selGym.isEvening ? `(Akşam Modu)` : `(Gündüz Modu)`;
+
+                if (selectedDayInfo.type !== 'Rest' && selectedDayInfo.type !== 'PASS') {
+                    let exArr = selectedDayInfo.description.split(',');
+                    taskListHtml = '<div class="grid grid-cols-1 gap-3">';
+                    exArr.forEach((ex, idx) => {
+                        let exNameClean = ex.trim(); let exNum = String(idx + 1).padStart(2, '0');
+                        let prevWeightHtml = ''; let inputHtml = '';
+
+                        if (selectedDayInfo.type === 'SE') {
+                            let past = schedule.filter(w => w.date < selectedDateStr && w.completed && w.type === 'SE' && w.reps === selectedDayInfo.reps);
+                            let latestWeightStr = "-";
+                            let punit = exNameClean === 'Plank' ? 'SN' : 'KG';
+                            if (past.length > 0) {
+                                let lastObj = past[past.length - 1];
+                                if (lastObj.weights && lastObj.weights[exNameClean]) latestWeightStr = lastObj.weights[exNameClean] + " " + punit;
+                            }
+
+                            let currentVal = (selectedDayInfo.weights && selectedDayInfo.weights[exNameClean]) ? selectedDayInfo.weights[exNameClean] : "";
+
+                            if (selectedDayInfo.completed) {
+                                inputHtml = `<div class="text-primary font-bold font-headline text-lg">${currentVal ? currentVal + ' ' + punit : '-'}</div>`;
+                            } else {
+                                inputHtml = `<div class="flex items-center gap-1 border-b border-outline-variant/40 pb-0.5 px-0"><input type="number" data-exercise="${exNameClean}" placeholder="0" class="weight-input w-8 md:w-14 bg-transparent text-white p-0 text-center font-headline font-bold text-xs md:text-lg outline-none focus:ring-0 border-none m-0" value="${currentVal}"><span class="text-[8px] md:text-[10px] font-bold text-on-surface-variant font-headline uppercase mr-1">${punit}</span></div>`;
+                                if (latestWeightStr !== "-") prevWeightHtml = `<p class="text-[8px] md:text-[9px] text-primary-dim uppercase mt-1">Önceki: ${latestWeightStr}</p>`;
+                            }
+                        }
+
+                        taskListHtml += `
+                        <div class="flex items-center justify-between bg-surface-container-highest p-3 md:p-4 rounded group transition-all hover:bg-surface-bright border-l-4 border-transparent active:border-primary">
+                            <div class="flex items-center gap-3 md:gap-4">
+                                <span class="text-on-surface-variant font-headline font-black text-sm md:text-lg">${exNum}</span>
+                                <div><p class="font-headline font-extrabold text-xs md:text-sm uppercase tracking-tight break-all max-w-[130px] sm:max-w-none">${exNameClean}</p><p class="text-[8px] md:text-[10px] text-on-surface-variant font-bold uppercase">${repsTitle}</p>${prevWeightHtml}</div>
+                            </div>
+                            ${inputHtml ? `<div class="flex items-center gap-2">${inputHtml}</div>` : ''}
+                        </div>`;
+                    });
+                    taskListHtml += '</div>';
+                }
+
+                let cardioSelectHtml = '';
                 if (selectedDayInfo.type === 'E' && !selectedDayInfo.completed) {
-                    optionsHtml = `
-                <div class="mb-4 mt-auto">
-                    <select onchange="updateSelect(this.value)" class="w-full bg-[#18181B] border border-[#27272A] text-white rounded-xl p-4 font-bold outline-none focus:border-accent" value="${cardioChoice}">
-                        <option value="" ${cardioChoice === '' ? 'selected' : ''}>Kardiyo Türünü Seçin...</option>
-                        <option value="Jogging" ${cardioChoice === 'Jogging' ? 'selected' : ''}>🏃‍♂️ Koşu</option>
-                        <option value="Rowing" ${cardioChoice === 'Rowing' ? 'selected' : ''}>🚣‍♂️ Kürek</option>
-                        <option value="Cycling" ${cardioChoice === 'Cycling' ? 'selected' : ''}>🚴‍♂️ Bisiklet</option>
-                        <option value="Rucking" ${cardioChoice === 'Rucking' ? 'selected' : ''}>🎒 Rucking</option>
-                        <option value="Swimming" ${cardioChoice === 'Swimming' ? 'selected' : ''}>🏊‍♂️ Yüzme</option>
-                    </select>
-                </div>`;
+                    cardioSelectHtml = `<div class="mt-4"><select onchange="updateSelect(this.value)" class="w-full bg-surface-container-highest border border-outline-variant/30 text-white rounded p-3 font-body text-sm outline-none focus:border-primary appearance-none cursor-pointer"><option value="" ${cardioChoice === '' ? 'selected' : ''}>Kardiyo Modülünü Seçin...</option><option value="Jogging" ${cardioChoice === 'Jogging' ? 'selected' : ''}>🏃‍♂️ Koşu</option><option value="Rowing" ${cardioChoice === 'Rowing' ? 'selected' : ''}>🚣‍♂️ Kürek</option><option value="Cycling" ${cardioChoice === 'Cycling' ? 'selected' : ''}>🚴‍♂️ Bisiklet</option><option value="Rucking" ${cardioChoice === 'Rucking' ? 'selected' : ''}>🎒 Rucking</option><option value="Swimming" ${cardioChoice === 'Swimming' ? 'selected' : ''}>🏊‍♂️ Yüzme</option></select></div>`;
                 }
 
                 let buttonsHtml = '';
                 if (selectedDayInfo.completed) {
-                    let cx = selectedDayInfo.skipped || selectedDayInfo.type === 'Pas Geçildi' ? 'text-[#EF4444] bg-[#2E1010] border-red-900 border-2' : selectedDayInfo.type === 'Rest' ? 'text-blue-400 bg-[#0c2445] border-blue-900 border-2' : 'text-accent bg-[#0B2B16] border-green-900 border-2';
-                    let tx = selectedDayInfo.skipped || selectedDayInfo.type === 'Pas Geçildi' ? 'PAS GEÇİLDİ' : 'TAMAMLANDI';
-                    buttonsHtml = `<div class="w-full text-center py-5 rounded-xl font-black text-xl tracking-widest bg-opacity-80 backdrop-blur-sm ${cx} relative z-20">${tx}</div>`;
+                    let btnTxt = selectedDayInfo.type === 'PASS' || selectedDayInfo.skipped ? 'ZAMANLAMA DEĞİŞTİRİLDİ (PAS)' : 'GÖREV BİLDİRİLDİ (TAMAM)';
+                    let bClass = selectedDayInfo.type === 'PASS' || selectedDayInfo.skipped ? 'text-error border-error/30' : 'text-primary border-primary/30';
+                    buttonsHtml = `<div class="flex flex-col md:flex-row gap-4 pt-4"><div class="flex-1 bg-surface-container-highest ${bClass} border text-center font-headline font-black py-4 text-xs md:text-lg tracking-widest rounded-md uppercase">${btnTxt}</div></div>`;
                 } else {
-                    buttonsHtml = `
-                    <button onclick="handleAction('skip', '${selectedDayInfo.date}')" data-glow="red" class="flex-1 text-[#A1A1AA] hover:text-white font-black text-sm py-5 rounded-xl uppercase tracking-widest transition-transform bg-[#18181B] active:scale-95 border border-[#27272A] shadow-md relative z-20">KAYDIR</button>
-                    <button onclick="handleAction('complete', ${selectedDayInfo.day_id})" data-glow="green" class="flex-1 bg-accent text-[#121212] font-black text-sm hover:opacity-90 py-5 rounded-xl uppercase tracking-widest ml-3 shadow-[0_4px_20px_rgba(0,230,118,0.2)] transition-transform active:scale-95 border-none relative z-20">ONAYLA</button>
-                `;
+                    buttonsHtml = `<div class="grid grid-cols-2 gap-2 md:gap-3 pt-4">
+                    <button onclick="handleAction('complete', ${selectedDayInfo.day_id})" class="col-span-2 bg-primary text-on-primary font-headline font-black py-4 md:py-5 text-lg md:text-xl tracking-tighter rounded-md uppercase hover:brightness-110 active:scale-95 transition-all shadow-[0_0_20px_rgba(243,255,202,0.1)]">GÖREVİ ONAYLA</button>
+                    <button onclick="handleAction('swap', ${selectedDayInfo.day_id})" class="bg-surface-container-highest text-primary border border-primary/20 font-headline font-bold py-3 text-[10px] md:text-xs tracking-tighter rounded-md uppercase hover:bg-surface-bright active:scale-95 transition-all px-1"><span class="material-symbols-outlined text-[12px] align-middle mb-0.5">swap_horiz</span> SWAP</button>
+                    <button onclick="handleAction('skip', '${selectedDayInfo.date}')" class="bg-surface-container-highest border border-error/20 text-error font-headline font-bold py-3 text-[9px] md:text-xs tracking-tighter rounded-md uppercase hover:bg-surface-bright active:scale-95 transition-all px-1"><span class="material-symbols-outlined text-[12px] align-middle mb-0.5">double_arrow</span> GÜN ATLA</button>
+                </div>`;
                 }
 
+                let nextW = schedule.find(w => w.date > selectedDateStr && w.type !== 'Rest' && w.type !== 'PASS' && !w.completed);
+                let nextUpHtml = nextW ? `
+                <div class="bg-surface-container-low border border-outline-variant/30 p-6 md:p-8 rounded-md relative overflow-hidden group mt-4">
+                    <div class="absolute right-[-20px] top-[-20px] opacity-10 rotate-12 transition-transform group-hover:rotate-0"><span class="material-symbols-outlined text-[8rem]" style="font-size:8rem">timer</span></div>
+                    <p class="text-primary-dim text-[10px] font-bold tracking-widest uppercase mb-1 md:mb-2">BİR SONRAKİ İSTASYON (${nextW.type})</p>
+                    <h3 class="text-xl md:text-3xl font-black font-headline uppercase leading-none">${nextW.type === 'E' ? 'Endurance' : 'Strength-Endurance'}</h3>
+                    <p class="text-[10px] md:text-sm text-on-surface-variant font-bold mt-2 uppercase">PLANLANAN HEDEF</p>
+                </div>` : '';
+
                 rightPanelContent = `
-                <div class="space-y-1 mb-8 relative z-20">
-                    <div class="text-accent font-bold text-xs uppercase tracking-widest">${selectedDayInfo.is_active ? `Hafta ${selectedDayInfo.week}` : (selectedDayInfo.type === 'Pas Geçildi' ? 'ÇÖP GÜN' : 'SABİT DINLENME')}</div>
-                    <div class="text-white font-black text-2xl tracking-tighter">${selectedDayInfo.date}</div>
-                </div>
-                <div class="text-4xl xl:text-5xl leading-none font-black mb-10 tracking-tighter uppercase relative z-20 ${selectedDayInfo.type === 'Rest' ? 'text-blue-400' : selectedDayInfo.type === 'Pas Geçildi' ? 'text-[#EF4444]' : 'text-accent'}">
-                    ${selectedDayInfo.type === 'Pas Geçildi' ? 'SKP' : selectedDayInfo.type} <span class="text-white text-3xl">/ GÜNÜ</span>
-                </div>
-                ${selectedDayInfo.type !== 'Rest' && selectedDayInfo.type !== 'Pas Geçildi' ? `
-                    <div class="text-[#71717A] font-bold text-[10px] mb-3 uppercase tracking-widest bg-[#27272A] p-2 rounded inline-block relative z-20">GÖREV LİSTESİ</div>
-                    <div class="space-y-3 mb-10 pl-2 relative z-20">
-                        ${selectedDayInfo.description.split(',').map(t => `<div class="flex text-white font-bold text-base xl:text-lg opacity-95"><span class="text-accent mr-3 mt-0.5">●</span> ${t.trim()}</div>`).join('')}
+                <div class="bg-surface-container-low p-5 md:p-6 rounded-md text-on-surface">
+                    <div class="flex justify-between items-end mb-6">
+                        <div class="font-headline"><h3 class="text-xl md:text-2xl font-black tracking-tight uppercase">${typeDesc}</h3><p class="text-primary-dim text-[10px] md:text-xs font-bold tracking-widest uppercase mt-1">HAFTA ${selectedDayInfo.week} // PROTOKOLÜ</p></div>
+                        <div class="text-right flex flex-col items-end"><span class="text-2xl md:text-3xl font-black font-headline text-on-surface">${selGym.time}</span><p class="text-[8px] md:text-[10px] font-bold text-on-surface-variant uppercase flex items-center gap-1"><span class="material-symbols-outlined text-[10px]">domain</span> GYM ${gymTimeStr}</p></div>
                     </div>
-                    <div class="text-[#71717A] font-bold text-[10px] mb-3 uppercase tracking-widest bg-[#27272A] p-2 rounded inline-block relative z-20">HEDEF SEVİYE</div>
-                    <div class="text-3xl font-black text-white tracking-widest mb-10 pl-2 opacity-90 relative z-20">${selectedDayInfo.reps}</div>
-                ` : ''}
-                ${optionsHtml}
-                <div class="mt-auto pt-6 w-full flex">${buttonsHtml}</div>
+                    ${selectedDayInfo.type !== 'Rest' && selectedDayInfo.type !== 'PASS' ? taskListHtml : `<div class="text-center py-8 opacity-50 bg-surface-container-highest rounded"><span class="material-symbols-outlined text-4xl md:text-6xl mb-2">${selectedDayInfo.type === 'Rest' ? 'bed' : 'delete'}</span><p class="font-headline font-bold text-lg md:text-xl tracking-widest">${selectedDayInfo.type === 'Rest' ? 'TAM DİNLENME' : 'ATLANDI / ÇÖP GÜN'}</p></div>`}
+                    ${cardioSelectHtml}
+                </div>
+                ${buttonsHtml}
+                ${nextUpHtml}
             `;
             }
-
-            root.innerHTML = `
-            <div class="flex w-full h-full text-gray-100 p-[15px] gap-[15px] animate-fade-in bg-black">
-                <div data-glow="panel" class="w-1/5 bg-[#131316] p-8 flex flex-col rounded-[1.5rem] border border-[#27272A] shadow-2xl">
-                    <div class="text-accent font-black text-[2.7rem] tracking-tighter leading-none mb-6 relative z-20 mt-2">MASS<br/>PROTOCOL</div>
-                    <div class="text-white font-bold text-xs mb-6 uppercase tracking-widest text-[#71717A] relative z-20">FAZ: BASE BUILDING</div>
-                    <div class="mb-2 text-[#A1A1AA] font-bold text-xs uppercase tracking-widest relative z-20">İLERLEME: %${currentProg}</div>
-                    <div class="w-full bg-[#27272A] h-2 rounded-full mb-10 overflow-hidden flex relative z-20"><div class="bg-accent h-full shadow-[0_0_10px_rgba(0,230,118,0.8)]" style="width: ${currentProg}%"></div></div>
-                    <div class="bg-[#18181B] p-5 rounded-2xl mb-4 border border-[#27272A] relative z-20">
-                        <div class="text-[#A1A1AA] text-[10px] font-bold mb-1 uppercase tracking-widest">Tamamlanan Tuğla</div><div class="text-white text-3xl font-black">${stats?.completed_weeks} HAFTA</div>
-                    </div>
-                    <div class="bg-[#18181B] p-5 rounded-2xl mb-4 border border-[#27272A] relative z-20">
-                        <div class="text-[#A1A1AA] text-[10px] font-bold mb-1 uppercase tracking-widest">Kalan Program</div><div class="text-white text-3xl font-black">${stats?.weeks_remaining} HAFTA</div>
-                    </div>
-                    <div class="bg-[#18181B] p-5 rounded-2xl mb-4 border border-[#27272A] relative z-20">
-                        <div class="text-[#A1A1AA] text-[10px] font-bold mb-1 uppercase tracking-widest">Pas Geçilen Gün</div><div class="text-3xl font-black ${stats?.skipped_days > 0 ? 'text-[#EF4444]' : 'text-white'}">${stats?.skipped_days} GÜN</div>
-                    </div>
-                    <button onclick="handleAction('clear_future')" data-glow="red" class="mt-auto w-full border border-[#27272A] bg-[#18181B] text-gray-400 font-bold text-xs py-4 flex items-center justify-center gap-2 rounded-xl uppercase tracking-widest relative z-20 transition-transform active:scale-95 shadow-md">
-                        <span class="relative z-20 text-white block!">Geleceği Sıfırla</span><span class="text-lg relative z-20 block!">🗑️</span>
-                    </button>
-                </div>
-                <div data-glow="panel" class="flex-1 flex flex-col rounded-[1.5rem] bg-panel border border-[#27272A] overflow-hidden">
-                    <div class="flex justify-between items-center px-10 py-8 bg-[#18181B] border-b border-[#27272A] relative z-20">
-                        <div class="flex-1 flex items-center"><button data-glow="blue" onclick="changeMonth(-1)" class="w-12 h-12 bg-black border border-[#27272A] rounded-xl text-accent font-bold transition-transform active:scale-90 relative z-20">◀</button></div>
-                        <div class="flex-[2] text-center flex flex-col justify-center items-center">
-                            <div class="text-accent font-bold text-sm tracking-widest mb-1 opacity-80">${greeting}</div>
-                            <h2 class="text-4xl font-black uppercase text-white tracking-[0.2em]">${MONTH_NAMES[month]} ${year}</h2>
-                            <div class="text-[#71717A] text-xs font-bold tracking-widest mt-1">BUGÜN: ${formattedDate}</div>
-                        </div>
-                        <div class="flex-1 flex justify-end"><button data-glow="blue" onclick="changeMonth(1)" class="w-12 h-12 bg-black border border-[#27272A] rounded-xl text-accent font-bold transition-transform active:scale-90 relative z-20">▶</button></div>
-                    </div>
-                    <div class="grid grid-cols-7 border-b border-[#27272A] bg-[#18181B] relative z-20">
-                        ${DAY_NAMES.map(d => `<div class="text-center font-bold text-[#A1A1AA] text-xs tracking-widest py-3">${d}</div>`).join('')}
-                    </div>
-                    <div class="grid grid-cols-7 flex-1 overflow-y-auto custom-scrollbar auto-rows-fr relative z-20 bg-[#0F0F12] p-1">
-                        ${blanksHtml}${daysHtml}
-                    </div>
-                </div>
-                <div data-glow="panel" class="w-[28%] bg-panel p-8 rounded-[1.5rem] flex flex-col border border-[#27272A] shadow-2xl overflow-y-auto custom-scrollbar">
-                    ${rightPanelContent}
-                    ${actionLoading ? `<div class="absolute inset-0 bg-[#0a0a0a]/80 z-50 flex items-center justify-center rounded-2xl"><div class="w-12 h-12 border-4 border-accent border-t-transparent rounded-full animate-spin"></div></div>` : ''}
-                </div>
-            </div>
-        `;
+            document.getElementById('ui-right-panel').innerHTML = rightPanelContent;
         }
-
         fetchData();
     </script>
 </body>
